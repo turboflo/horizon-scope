@@ -1,0 +1,14 @@
+horizon-match:
+  comparison-service:
+    type: openai
+    api_key: "{OPENAI_API_KEY}"
+    model: "gpt-4o-mini"
+  vector-search-service:
+    store:
+      type: pinecone
+      api_key: "{PINECONE_API_KEY}"
+      index: "projects-text-embedding-3-small"
+    embeddings:
+      type: openai
+      api_key: "{OPENAI_API_KEY}"
+      model: "text-embedding-3-small"
