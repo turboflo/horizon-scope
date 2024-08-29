@@ -1,3 +1,7 @@
+# horizon-match custom
+horizon_projects_embeddings.pkl
+.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
