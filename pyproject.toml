@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Florian Hegenbarth <florian@hegenbarth.dev>"]
 readme = "README.md"
-package-mode = false
+packages = [{ include = "horizon_match", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -15,8 +15,10 @@ pandas = "^2.2.2"
 matplotlib = "^3.9.2"
 seaborn = "^0.13.2"
 tiktoken = "^0.7.0"
-pinecone-client = {extras = ["grpc"], version = "^5.0.1"}
+pinecone-client = { extras = ["grpc"], version = "^5.0.1" }
 pinecone = "^5.0.1"
+pyyaml = "^6.0.2"
+pydantic = "^2.8.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
