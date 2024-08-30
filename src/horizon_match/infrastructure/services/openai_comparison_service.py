@@ -1,7 +1,7 @@
 from openai import OpenAI
 from typing import List
 from horizon_match.application.interfaces.comparison_service import ComparisonService
-from horizon_match.domain.entities.comparison_result import ComparisonResult
+from horizon_match.domain.entities.comparison_result import Comparison
 from horizon_match.infrastructure.config.config_manager import ConfigManager
 
 
@@ -14,13 +14,13 @@ class OpenAIComparisonService(ComparisonService):
         self.client = OpenAI(api_key=openai_api_key)
         self.model = self.config.get("horizon-match", "comparison-service", "model")
 
-    def compare(self, my_project: str, existing_project: str) -> ComparisonResult:
+    def compare(self, my_project: str, existing_project: str) -> Comparison:
         messages = self._create_comparison_prompt(my_project, existing_project)
 
         completion = self.client.beta.chat.completions.parse(
             model=self.model,
             messages=messages,
-            response_format=ComparisonResult,
+            response_format=Comparison,
         )
 
         return completion.choices[0].message.parsed

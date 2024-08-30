@@ -1,5 +1,6 @@
 from typing import Any, List
 from horizon_match.application.use_cases.compare_projects import CompareProjects
+from horizon_match.domain.entities.horizon_match_result import HorizonMatchResult
 from horizon_match.infrastructure.services.pinecone_search_service import (
     PineconeSearchService,
 )
@@ -7,7 +8,7 @@ from horizon_match.infrastructure.services.openai_comparison_service import (
     OpenAIComparisonService,
 )
 from horizon_match.infrastructure.config.config_manager import ConfigManager
-from horizon_match.domain.entities.comparison_result import ComparisonResult
+from horizon_match.domain.entities.comparison_result import Comparison
 from horizon_match.domain.entities.project import Project
 
 
@@ -25,7 +26,7 @@ class HorizonMatchClient:
         config = ConfigManager(config_path)
         return cls(config)
 
-    def match(self, query: str, k: int) -> List[ComparisonResult]:
+    def match(self, query: str, k: int) -> List[HorizonMatchResult]:
         return self.compare_projects_use_case.execute(query, k)
 
     def index_project(self, project: Project) -> None:

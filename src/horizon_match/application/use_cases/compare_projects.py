@@ -3,7 +3,8 @@ from horizon_match.application.interfaces.vector_search_service import (
     VectorSearchService,
 )
 from horizon_match.application.interfaces.comparison_service import ComparisonService
-from horizon_match.domain.entities.comparison_result import ComparisonResult
+from horizon_match.domain.entities.comparison_result import Comparison
+from horizon_match.domain.entities.horizon_match_result import HorizonMatchResult
 
 
 class CompareProjects:
@@ -15,7 +16,7 @@ class CompareProjects:
         self.vector_search_service = vector_search_service
         self.comparison_service = comparison_service
 
-    def execute(self, query: str, k: int) -> List[ComparisonResult]:
+    def execute(self, query: str, k: int) -> List[HorizonMatchResult]:
         """
         Execute the project comparison use case.
 
@@ -36,6 +37,7 @@ class CompareProjects:
         results = []
         for project in similar_projects:
             comparison = self.comparison_service.compare(query, project.description)
-            results.append(comparison)
+            result = HorizonMatchResult(project, comparison)
+            results.append(result)
 
         return results

@@ -39,6 +39,8 @@ class PineconeSearchService(VectorSearchService):
         )
         query_embedding = embedding_response.data[0].embedding
 
+        print(self.index.describe_index_stats())
+
         # Perform the search using Pinecone
         search_results = self.index.query(
             vector=query_embedding, top_k=k, include_metadata=True
@@ -54,6 +56,7 @@ class PineconeSearchService(VectorSearchService):
                 author=match.metadata.get("author", ""),
                 created_at=match.metadata.get("contentUpdateDate", ""),
                 tags=match.metadata.get("tags", []),
+                score=match.get("score", None),
             )
             projects.append(project)
 

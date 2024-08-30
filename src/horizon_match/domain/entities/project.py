@@ -11,3 +11,4 @@ class Project(BaseModel):
     tags: Optional[list[str]] = Field(
         default=[], description="List of tags associated with the project"
     )
+    score: Optional[float] = Field(None, description="Simmilarity score of the project")

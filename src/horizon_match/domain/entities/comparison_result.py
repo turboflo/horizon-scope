@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 
-class ComparisonResult(BaseModel):
+class Comparison(BaseModel):
     summary: str = Field(
         ..., description="One-sentence summary of the existing project"
     )

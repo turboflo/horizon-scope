@@ -65,19 +65,19 @@ def main():
 
             st.header("Comparison Results")
             for i, result in enumerate(st.session_state.results, 1):
-                with st.expander(f"Match {i}: {result.summary}", expanded=True):
-                    st.metric("Similarity Score", f"{result.score:.2f}")
+                with st.expander(result.comaprison.summary, expanded=True):
+                    st.metric("AI Score", f"{result.comaprison.score:.2f}")
 
                     col1, col2 = st.columns(2)
                     with col1:
                         st.subheader("Similarities")
-                        st.write(result.similarity)
+                        st.write(result.comaprison.similarity)
                     with col2:
                         st.subheader("Differences")
-                        st.write(result.difference)
+                        st.write(result.comaprison.difference)
 
                     st.subheader("Analysis")
-                    st.write(result.reason)
+                    st.write(result.comaprison.reason)
 
             if st.button("Clear Results"):
                 st.session_state.comparing = False
