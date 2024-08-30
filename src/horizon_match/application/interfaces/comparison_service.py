@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from horizon_match.domain.entities.comparison_result import Comparison
+from horizon_match.domain.entities.comparison import Comparison
 
 
 class ComparisonService(ABC):

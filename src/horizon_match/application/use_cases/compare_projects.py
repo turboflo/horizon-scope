@@ -3,7 +3,7 @@ from horizon_match.application.interfaces.vector_search_service import (
     VectorSearchService,
 )
 from horizon_match.application.interfaces.comparison_service import ComparisonService
-from horizon_match.domain.entities.comparison_result import Comparison
+from horizon_match.domain.entities.comparison import Comparison
 from horizon_match.domain.entities.horizon_match_result import HorizonMatchResult
 
 

@@ -8,7 +8,7 @@ from horizon_match.infrastructure.services.openai_comparison_service import (
     OpenAIComparisonService,
 )
 from horizon_match.infrastructure.config.config_manager import ConfigManager
-from horizon_match.domain.entities.comparison_result import Comparison
+from horizon_match.domain.entities.comparison import Comparison
 from horizon_match.domain.entities.project import Project
 
 

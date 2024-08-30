@@ -132,7 +132,7 @@ def main():
 
                     # Project ID and creation date in small text
                     st.caption(
-                        f"Project ID: {result.project.id} | Created: {result.project.created_at or 'Date not available'}"
+                        f"Project ID: {result.project.id} | Content Update: {result.project.content_update_date or 'Date not available'}"
                     )
         else:
             st.warning("⚠️ Please enter a project description.")
