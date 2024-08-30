@@ -134,11 +134,6 @@ def main():
                     st.caption(
                         f"Project ID: {result.project.id} | Created: {result.project.created_at or 'Date not available'}"
                     )
-
-            if st.button("🔄 Clear Results"):
-                st.session_state.comparing = False
-                st.session_state.results = None
-                st.experimental_rerun()
         else:
             st.warning("⚠️ Please enter a project description.")
             st.session_state.comparing = False
