@@ -46,10 +46,10 @@ class OpenAIComparisonService(ComparisonService):
                 - summary: One-sentence summary of the existing project
                 - similarity: Similarities between the projects
                 - difference: Differences between the projects
-                - score: Similarity score (0-100)
+                - score: Similarity score (0 to 1 with 1 being most similar)
                 - reason: Brief explanation for the score
 
-                Ensure that the score is an integer between 0 and 100.
+                Ensure that the score is an integer between 0 and 1.
                 """,
             },
         ]
