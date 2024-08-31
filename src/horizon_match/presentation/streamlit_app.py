@@ -19,6 +19,12 @@ def start_comparison():
     st.session_state.results = None
 
 
+def toggle_description(i):
+    st.session_state[f"show_desc_{i}"] = not st.session_state.get(
+        f"show_desc_{i}", False
+    )
+
+
 def main():
     st.set_page_config(
         page_title="Horizon Match", layout="wide", initial_sidebar_state="expanded"
@@ -99,23 +105,20 @@ def main():
                             "🔒 Confidence", f"{result.comparison.confidence*100:.1f}%"
                         )
 
-                    if f"show_desc_{i}" not in st.session_state:
-                        st.session_state[f"show_desc_{i}"] = False
-
                     # Dynamic button text based on current state
                     button_text = (
                         "Hide Original Description"
-                        if st.session_state[f"show_desc_{i}"]
+                        if st.session_state.get(f"show_desc_{i}", False)
                         else "View Original Description"
                     )
 
-                    if st.button(button_text, key=f"toggle_{i}"):
-                        st.session_state[f"show_desc_{i}"] = not st.session_state[
-                            f"show_desc_{i}"
-                        ]
-
-                    if st.session_state[f"show_desc_{i}"]:
-                        st.write(result.project.description)
+                    if st.button(
+                        button_text,
+                        key=f"toggle_{i}",
+                        on_click=toggle_description,
+                        args=(i,),
+                    ):
+                        pass
 
                     if st.session_state.get(f"show_desc_{i}", False):
                         st.write(result.project.description)
