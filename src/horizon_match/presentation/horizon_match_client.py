@@ -9,7 +9,6 @@ from horizon_match.infrastructure.services.openai_comparison_service import (
 )
 from horizon_match.infrastructure.config.config_manager import ConfigManager
 from horizon_match.domain.entities.project import Project
-from horizon_match.infrastructure.services.state_manager import StateManager
 
 
 class HorizonMatchClient:
@@ -20,7 +19,6 @@ class HorizonMatchClient:
         self.compare_projects_use_case = CompareProjects(
             self.vector_search_service, self.comparison_service
         )
-        self.state_manager = StateManager()
 
     @classmethod
     def from_config(cls, config_path: str = "config.yml") -> "HorizonMatchClient":
@@ -38,15 +36,3 @@ class HorizonMatchClient:
 
     def get_config(self, *keys: str, default: Any = None) -> Any:
         return self.config_manager.get(*keys, default=default)
-
-    def update_state(self, new_state: str) -> None:
-        self.state_manager.update_state(new_state)
-
-    def get_current_state(self) -> str:
-        return self.state_manager.get_current_state()
-
-    def state_stream(self):
-        return self.state_manager.state_stream()
-
-    def stop_state_stream(self):
-        self.state_manager.stop()
