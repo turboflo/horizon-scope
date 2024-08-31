@@ -14,7 +14,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
       - name: Set up Python 3.11
@@ -55,27 +54,23 @@ jobs:
             echo "Warning: Coverage is below 70%"
           fi
 
-      - name: Python Semantic Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prepare for release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+          git checkout -b temp-release-branch
+
+      - name: Python Semantic Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
           poetry run semantic-release version
           poetry run semantic-release publish
 
-      - name: Check if release was created
-        id: check-release
+      - name: Push changes
+        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
         run: |
-          if [ -n "$(git tag --points-at HEAD)" ]; then
-            echo "RELEASE_CREATED=true" >> $GITHUB_ENV
-          else
-            echo "RELEASE_CREATED=false" >> $GITHUB_ENV
-          fi
-
-      - name: Merge development into main if release created
-        if: ${{ env.RELEASE_CREATED == 'true' }}
-        run: |
-          git checkout main
-          git merge --ff-only development
-          git push origin main
+          git push --follow-tags origin temp-release-branch:development
+          git push origin development:main
