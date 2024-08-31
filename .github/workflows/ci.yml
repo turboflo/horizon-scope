@@ -1,22 +1,10 @@
-name: CI
+name: AI CI
 
 on:
   push:
     branches: [development]
   pull_request:
     branches: [development]
-  workflow_call:
-    inputs:
-      python-version:
-        description: "The Python version to use"
-        type: string
-        default: "3.11"
-        required: true
-      test-coverage-threshold:
-        description: "Minimum test coverage percentage required"
-        type: number
-        default: 70
-        required: true
 
 jobs:
   test:
@@ -29,6 +17,11 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
       - name: Cache Poetry and dependencies
         uses: actions/cache@v3
         with:
@@ -38,11 +31,6 @@ jobs:
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
-
-      - name: Setup Python ${{ inputs.python-version }} Environment
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ inputs.python-version }}
 
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -56,44 +44,40 @@ jobs:
           poetry install --no-interaction --with dev
 
       - name: Run unit tests with coverage report
-        id: pytest
         run: |
           poetry run python -m pytest -v --cov=./src --cov-report term-missing:skip-covered tests
 
-      - name: Check coverage is at least ${{ inputs.test-coverage-threshold }}%
-        id: coverage
+      - name: Check coverage is at least 70%
         run: |
           poetry run coverage report -m
           COVERAGE=$(poetry run coverage report -m | grep -Po '^TOTAL.*\s(\d+%)$' | awk '{sub("%", "", $NF); print $NF}')
           echo "Coverage is $COVERAGE%"
-          if [ "$COVERAGE" -lt "${{ inputs.test-coverage-threshold }}" ]; then
+          if [ "$COVERAGE" -lt "70" ]; then
             exit 1
           fi
 
       - name: Python Semantic Release
-        id: semantic-release
-        uses: python-semantic-release/python-semantic-release@v9.8.3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip install python-semantic-release
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          semantic-release version
+          semantic-release publish
 
       - name: Check if release was created
         id: check-release
         run: |
-          echo "Semantic Release Outputs:"
-          echo "Released: ${{ steps.semantic-release.outputs.released }}"
-          echo "Version: ${{ steps.semantic-release.outputs.version }}"
-          if [ "${{ steps.semantic-release.outputs.released }}" == "true" ]; then
+          if [ -n "$(git tag --points-at HEAD)" ]; then
             echo "RELEASE_CREATED=true" >> $GITHUB_ENV
           else
             echo "RELEASE_CREATED=false" >> $GITHUB_ENV
           fi
 
       - name: Merge development into main if release created
-        id: merge-branches
         if: ${{ env.RELEASE_CREATED == 'true' }}
-        uses: mtanzi/action-automerge@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          source: "development"
-          target: "main"
-          webhook_url: ${{ secrets.WEBHOOK_URL }}
+        run: |
+          git checkout main
+          git merge --ff-only development
+          git push origin main
