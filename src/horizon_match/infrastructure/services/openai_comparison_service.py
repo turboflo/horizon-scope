@@ -4,6 +4,8 @@ from horizon_match.application.interfaces.comparison_service import ComparisonSe
 from horizon_match.domain.entities.comparison import Comparison
 from horizon_match.infrastructure.config.config_manager import ConfigManager
 
+MAX_PROJECT_LENGTH = 10000
+
 
 class OpenAIComparisonService(ComparisonService):
     def __init__(self, config: ConfigManager):
@@ -15,15 +17,27 @@ class OpenAIComparisonService(ComparisonService):
         self.model = self.config.get("horizon-match", "comparison-service", "model")
 
     def compare(self, my_project: str, existing_project: str) -> Comparison:
+        self._validate_input(my_project, "My project")
+        self._validate_input(existing_project, "Existing project")
+
         messages = self._create_comparison_prompt(my_project, existing_project)
 
-        completion = self.client.beta.chat.completions.parse(
+        completion = self.client.chat.completions.create(
             model=self.model,
             messages=messages,
-            response_format=Comparison,
+            response_format={"type": "json_object"},
         )
 
-        return completion.choices[0].message.parsed
+        response_content = completion.choices[0].message.content
+        return Comparison.model_validate_json(response_content)
+
+    def _validate_input(self, project: str, project_name: str):
+        if not project.strip():
+            raise ValueError(f"{project_name} description cannot be empty")
+        if len(project) > MAX_PROJECT_LENGTH:
+            raise ValueError(
+                f"{project_name} description exceeds maximum length of {MAX_PROJECT_LENGTH} characters"
+            )
 
     def _create_comparison_prompt(
         self, my_project: str, existing_project: str
