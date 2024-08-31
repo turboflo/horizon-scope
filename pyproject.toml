@@ -28,6 +28,3 @@ ipykernel = "^6.29.5"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-start-streamlit = "horizon_match.presentation.streamlit_app:main"
