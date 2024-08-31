@@ -12,7 +12,6 @@ from horizon_match.infrastructure.config.config_manager import ConfigManager
 class PineconeSearchService(VectorSearchService):
     def __init__(self, config: ConfigManager):
         self.config = config
-
         # Initialize Pinecone
         pinecone_api_key = self.config.get(
             "horizon-match", "vector-search-service", "store", "api_key"
@@ -22,7 +21,6 @@ class PineconeSearchService(VectorSearchService):
             "horizon-match", "vector-search-service", "store", "index"
         )
         self.index = pc.Index(index_name)
-
         # Initialize OpenAI client for embeddings
         openai_api_key = self.config.get(
             "horizon-match", "vector-search-service", "embeddings", "api_key"
@@ -51,13 +49,10 @@ class PineconeSearchService(VectorSearchService):
                 id=match.id,
                 title=match.metadata.get("title", ""),
                 description=match.metadata.get("objective", ""),
-                author=match.metadata.get("author", ""),
-                created_at=match.metadata.get("contentUpdateDate", ""),
-                tags=match.metadata.get("tags", []),
-                similarity=match.get("score", None),
+                content_update_date=match.metadata.get("contentUpdateDate", ""),
+                similarity=match.score,
             )
             projects.append(project)
-
         return projects
 
     def index_project(self, project: Project):
@@ -76,10 +71,8 @@ class PineconeSearchService(VectorSearchService):
                     "metadata": {
                         "title": project.title,
                         "objective": project.description,
-                        "author": project.author,
-                        "contentUpdateDate": project.created_at
+                        "contentUpdateDate": project.content_update_date
                         or datetime.now().isoformat(),
-                        "tags": project.tags,
                     },
                 }
             ]
