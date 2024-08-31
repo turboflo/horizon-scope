@@ -54,6 +54,7 @@ class PineconeSearchService(VectorSearchService):
                 author=match.metadata.get("author", ""),
                 created_at=match.metadata.get("contentUpdateDate", ""),
                 tags=match.metadata.get("tags", []),
+                similarity=match.get("score", None),
             )
             projects.append(project)
 
