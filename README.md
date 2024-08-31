@@ -1,6 +1,12 @@
 
 # Horizon Match 🚀
 
+[![CI](https://github.com/turboflo/horizon-match/actions/workflows/ci.yml/badge.svg?branch=development)](https://github.com/turboflo/horizon-match/actions/workflows/ci.yml)
+![GitHub Release](https://img.shields.io/github/v/release/turboflo/horizon-match)
+![GitHub contributors](https://img.shields.io/github/contributors/turboflo/horizon-match)
+
+
+
 **Horizon Match** is a project comparison and analysis tool that leverages vector search and AI-powered comparisons to help users discover similar projects and gain valuable insights.
 
 ## Key Features 🌟
