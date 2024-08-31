@@ -13,10 +13,10 @@ from horizon_match.domain.entities.project import Project
 
 
 class HorizonMatchClient:
-    def __init__(self, config: ConfigManager):
-        self.config = config
-        self.vector_search_service = PineconeSearchService(config)
-        self.comparison_service = OpenAIComparisonService(config)
+    def __init__(self, config_manager: ConfigManager):
+        self.config_manager = config_manager
+        self.vector_search_service = PineconeSearchService(config_manager)
+        self.comparison_service = OpenAIComparisonService(config_manager)
         self.compare_projects_use_case = CompareProjects(
             self.vector_search_service, self.comparison_service
         )
@@ -36,4 +36,4 @@ class HorizonMatchClient:
         return self.vector_search_service.search(query, k)
 
     def get_config(self, *keys: str, default: Any = None) -> Any:
-        return self.config.get(*keys, default=default)
+        return self.config_manager.get(*keys, default=default)
