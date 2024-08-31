@@ -40,4 +40,7 @@ class CompareProjects:
             result = HorizonMatchResult(project, comparison)
             results.append(result)
 
+        # Sort project by AI similarity score
+        results.sort(key=lambda x: x.comparison.score, reverse=True)
+
         return results

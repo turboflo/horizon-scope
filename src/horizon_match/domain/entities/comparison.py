@@ -18,7 +18,11 @@ class Comparison(BaseModel):
         ...,
         description="Similarity score from 0 to 1 (with two decimal places precision), where 0 indicates no similarity and 1 indicates identical projects",
     )
+    confidence: float = Field(
+        ...,
+        description="Confidence score from 0 to 1 (with two decimal places precision), where 0 indicates low confidence and 1 indicates high confidence in the accuracy and reliability of the similarity score and analysis",
+    )
     reason: str = Field(
         ...,
-        description="Thorough, evidence-based justification for the assigned similarity score, referencing specific elements from both project descriptions",
+        description="Thorough, evidence-based justification for the assigned similarity and confidence scores, referencing specific elements from both project descriptions",
     )

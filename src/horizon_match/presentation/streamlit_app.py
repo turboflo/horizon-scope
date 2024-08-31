@@ -80,10 +80,10 @@ def main():
                 with st.expander(
                     f"#{i}: {result.project.title or 'Untitled Project'}", expanded=True
                 ):
-                    col1, col2 = st.columns([1, 1])
+                    col1, col2, col3 = st.columns([1, 1, 1])
                     with col1:
                         st.metric(
-                            "🤖 AI Similarity", f"{result.comaprison.score*100:.1f}%"
+                            "🤖 AI Similarity", f"{result.comparison.score*100:.1f}%"
                         )
                     with col2:
                         st.metric(
@@ -93,6 +93,10 @@ def main():
                                 if result.project.similarity is not None
                                 else "N/A"
                             ),
+                        )
+                    with col3:
+                        st.metric(
+                            "🔒 Confidence", f"{result.comparison.confidence*100:.1f}%"
                         )
 
                     if f"show_desc_{i}" not in st.session_state:
@@ -117,18 +121,18 @@ def main():
                         st.write(result.project.description)
 
                     st.subheader("📝 Summary")
-                    st.write(result.comaprison.summary)
+                    st.write(result.comparison.summary)
 
                     col1, col2 = st.columns(2)
                     with col1:
                         st.subheader("✅ Similarities")
-                        st.write(result.comaprison.similarity)
+                        st.write(result.comparison.similarity)
                     with col2:
                         st.subheader("❌ Differences")
-                        st.write(result.comaprison.difference)
+                        st.write(result.comparison.difference)
 
                     st.subheader("🧐 Analysis")
-                    st.write(result.comaprison.reason)
+                    st.write(result.comparison.reason)
 
                     # Project ID and creation date in small text
                     st.caption(

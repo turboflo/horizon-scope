@@ -6,4 +6,4 @@ from horizon_match.domain.entities.project import Project
 @dataclass
 class HorizonMatchResult:
     project: Project
-    comaprison: Comparison
+    comparison: Comparison
