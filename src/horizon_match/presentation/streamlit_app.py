@@ -29,12 +29,12 @@ def main():
     with st.sidebar:
         st.markdown("### ℹ️ About")
         st.markdown("🌐 [GitHub Repository](https://github.com/turboflo/horizon-match)")
-        st.markdown("👤 Created by: Florian Hegenbarth")
         st.markdown(
             "📧 Contact: [florian@hegenbarth.dev](mailto:florian@hegenbarth.dev)"
         )
+        st.markdown("👤 Created by: Florian Hegenbarth")
 
-    st.title("✨ Horizon Match")
+    st.title("🚀 Horizon Match")
     st.subheader("Discover similar projects and gain insights")
 
     # Initialize client
