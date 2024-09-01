@@ -1,78 +1,87 @@
-name: AI CI
+name: CI
+
+# Define variables for reuse
+variables:
+  PYTHON_VERSION: "3.11"
+  COVERAGE_THRESHOLD: 60
+  BRANCH: development
 
 on:
   push:
-    branches: [ development ]
+    branches: [$BRANCH]
   pull_request:
-    branches: [ development ]
+    branches: [$BRANCH]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        token: ${{ secrets.PAT }}  # Use PAT instead of GITHUB_TOKEN
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.11"
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: Install Poetry
-      uses: snok/install-poetry@v1
-      with:
-        virtualenvs-create: true
-        virtualenvs-in-project: true
-        installer-parallel: true
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
 
-    - name: Install dependencies
-      run: |
-        poetry install --no-interaction --with dev
+      - name: Install dependencies
+        run: |
+          poetry install --no-interaction --with dev
 
-    - name: Display installed packages
-      run: |
-        poetry show
+      - name: Display installed packages
+        run: |
+          poetry show
 
-    - name: Investigate Pinecone library
-      run: |
-        echo "Pinecone library content:"
-        cat .venv/lib/python3.11/site-packages/pinecone/control/pinecone.py
+      - name: Investigate Pinecone library
+        run: |
+          echo "Pinecone library content:"
+          cat .venv/lib/python${{ env.PYTHON_VERSION }}/site-packages/pinecone/control/pinecone.py
 
-    - name: Run unit tests with coverage report
-      run: |
-        poetry run python -m pytest -v --cov=./src --cov-report term-missing:skip-covered tests || echo "Some tests failed, but continuing workflow"
+      - name: Run unit tests with coverage report
+        run: |
+          poetry run python -m pytest -v --cov=./src --cov-report term-missing:skip-covered tests || echo "Some tests failed, but continuing workflow"
 
-    - name: Check coverage
-      run: |
-        poetry run coverage report -m
-        COVERAGE=$(poetry run coverage report -m | grep -Po '^TOTAL.*\s(\d+%)$' | awk '{sub("%", "", $NF); print $NF}')
-        echo "Coverage is $COVERAGE%"
-        if [ "$COVERAGE" -lt "70" ]; then
-          echo "Warning: Coverage is below 70%"
-        fi
+      - name: Check coverage
+        run: |
+          poetry run coverage report -m
+          COVERAGE=$(poetry run coverage report -m | grep -Po '^TOTAL.*\s(\d+%)$' | awk '{sub("%", "", $NF); print $NF}')
+          echo "Coverage is $COVERAGE%"
+          if [ "$COVERAGE" -lt "${{ env.COVERAGE_THRESHOLD }}" ]; then
+            echo "Warning: Coverage is below ${{ env.COVERAGE_THRESHOLD }}%"
+          fi
 
-    - name: Prepare for release
-      if: github.event_name == 'push' && github.ref == 'refs/heads/development'
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
+      - name: Python Semantic Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          poetry run semantic-release version
+          poetry run semantic-release publish
 
-    - name: Python Semantic Release
-      if: github.event_name == 'push' && github.ref == 'refs/heads/development'
-      env:
-        GH_TOKEN: ${{ secrets.PAT }}
-      run: |
-        poetry run semantic-release version
-        poetry run semantic-release publish
+      - name: Check if release was created
+        id: check-release
+        run: |
+          if [ -n "$(git tag --points-at HEAD)" ]; then
+            echo "RELEASE_CREATED=true" >> $GITHUB_ENV
+          else
+            echo "RELEASE_CREATED=false" >> $GITHUB_ENV
+          fi
 
-    - name: Push changes
-      if: github.event_name == 'push' && github.ref == 'refs/heads/development'
-      env:
-        GH_TOKEN: ${{ secrets.PAT }}
-      run: |
-        git push --follow-tags origin HEAD:development
-        git push origin development:main
+      - name: Merge development into main if release created
+        if: ${{ env.RELEASE_CREATED == 'true' }}
+        run: |
+          git checkout main
+          git merge --ff-only $BRANCH
+          git push origin main
