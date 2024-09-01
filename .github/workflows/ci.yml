@@ -35,16 +35,6 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
 
-      - name: Cache Poetry Dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/pypoetry
-            ~/.venv
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-poetry-
-
       - name: Install dependencies
         run: |
           poetry install --no-interaction --with dev
