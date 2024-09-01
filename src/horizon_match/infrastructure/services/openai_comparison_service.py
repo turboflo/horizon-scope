@@ -1,5 +1,6 @@
+from __future__ import annotations
 from openai import OpenAI
-from typing import List
+from typing import List, Dict
 from horizon_match.application.interfaces.comparison_service import ComparisonService
 from horizon_match.domain.entities.comparison import Comparison
 from horizon_match.infrastructure.config.config_manager import ConfigManager
@@ -8,7 +9,23 @@ MAX_PROJECT_LENGTH = 10000
 
 
 class OpenAIComparisonService(ComparisonService):
-    def __init__(self, config: ConfigManager):
+    """Service for comparing project descriptions using OpenAI's language model.
+
+    This service uses OpenAI to generate detailed comparisons between two project descriptions,
+    providing insights into their similarities and differences.
+
+    Attributes:
+        config (ConfigManager): Configuration manager for accessing API keys and model information.
+        client (OpenAI): OpenAI client for generating comparisons.
+        model (str): The model used for generating the comparison.
+    """
+
+    def __init__(self, config: ConfigManager) -> None:
+        """Initialize OpenAIComparisonService with configuration settings.
+
+        Args:
+            config (ConfigManager): Configuration manager for the service.
+        """
         self.config = config
         openai_api_key = self.config.get(
             "horizon-match", "comparison-service", "api_key"
@@ -17,6 +34,18 @@ class OpenAIComparisonService(ComparisonService):
         self.model = self.config.get("horizon-match", "comparison-service", "model")
 
     def compare(self, my_project: str, existing_project: str) -> Comparison:
+        """Compare two project descriptions using OpenAI.
+
+        Args:
+            my_project (str): Description of the user's project.
+            existing_project (str): Description of the existing project.
+
+        Returns:
+            Comparison: A Comparison object containing the results of the comparison.
+
+        Raises:
+            ValueError: If either project description is empty or exceeds the maximum length.
+        """
         self._validate_input(my_project, "My project")
         self._validate_input(existing_project, "Existing project")
 
@@ -31,7 +60,16 @@ class OpenAIComparisonService(ComparisonService):
         response_content = completion.choices[0].message.content
         return Comparison.model_validate_json(response_content)
 
-    def _validate_input(self, project: str, project_name: str):
+    def _validate_input(self, project: str, project_name: str) -> None:
+        """Validate the project description input.
+
+        Args:
+            project (str): The project description to validate.
+            project_name (str): The name of the project (for error messages).
+
+        Raises:
+            ValueError: If the project description is empty or exceeds the maximum length.
+        """
         if not project.strip():
             raise ValueError(f"{project_name} description cannot be empty")
         if len(project) > MAX_PROJECT_LENGTH:
@@ -41,7 +79,16 @@ class OpenAIComparisonService(ComparisonService):
 
     def _create_comparison_prompt(
         self, my_project: str, existing_project: str
-    ) -> List[dict[str, str]]:
+    ) -> List[Dict[str, str]]:
+        """Create the prompt for the comparison model.
+
+        Args:
+            my_project (str): Description of the user's project.
+            existing_project (str): Description of the existing project.
+
+        Returns:
+            List[Dict[str, str]]: A list of messages forming the prompt for the OpenAI model.
+        """
         return [
             {
                 "role": "system",
