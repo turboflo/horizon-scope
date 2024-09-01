@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pinecone import Pinecone
 from openai import OpenAI
 from typing import List
@@ -10,7 +11,23 @@ from horizon_match.infrastructure.config.config_manager import ConfigManager
 
 
 class PineconeSearchService(VectorSearchService):
-    def __init__(self, config: ConfigManager):
+    """Service for searching and indexing projects using Pinecone and OpenAI.
+
+    This service integrates Pinecone for vector-based search and OpenAI for generating embeddings.
+
+    Attributes:
+        config (ConfigManager): Configuration manager for accessing API keys and model information.
+        index (Pinecone.Index): Pinecone index for storing and querying project embeddings.
+        openai_client (OpenAI): OpenAI client for generating embeddings.
+        embedding_model (str): The model used for generating embeddings.
+    """
+
+    def __init__(self, config: ConfigManager) -> None:
+        """Initialize PineconeSearchService with configuration settings.
+
+        Args:
+            config (ConfigManager): Configuration manager for the service.
+        """
         self.config = config
         # Initialize Pinecone
         pinecone_api_key = self.config.get(
@@ -31,6 +48,15 @@ class PineconeSearchService(VectorSearchService):
         )
 
     def search(self, query: str, k: int) -> List[Project]:
+        """Search for projects matching the query.
+
+        Args:
+            query (str): The query string to search for.
+            k (int): The number of top results to return.
+
+        Returns:
+            List[Project]: A list of projects matching the query.
+        """
         # Generate embedding for the query
         embedding_response = self.openai_client.embeddings.create(
             model=self.embedding_model, input=query
@@ -55,7 +81,12 @@ class PineconeSearchService(VectorSearchService):
             projects.append(project)
         return projects
 
-    def index_project(self, project: Project):
+    def index_project(self, project: Project) -> None:
+        """Index a project in Pinecone.
+
+        Args:
+            project (Project): The project to be indexed.
+        """
         # Generate embedding for the project description
         embedding_response = self.openai_client.embeddings.create(
             model=self.embedding_model, input=project.description

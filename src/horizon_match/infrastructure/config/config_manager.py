@@ -5,7 +5,21 @@ from dotenv import load_dotenv
 
 
 class ConfigManager:
-    def __init__(self, config_path: str = "config.yml"):
+    """Manages configuration settings loaded from a YAML file and environment variables.
+
+    This class reads configuration settings from a YAML file and allows access to those settings.
+    It also supports interpolation of environment variables in the configuration values.
+
+    Attributes:
+        config (Dict[str, Any]): The configuration settings loaded from the YAML file.
+    """
+
+    def __init__(self, config_path: str = "config.yml") -> None:
+        """Initialize ConfigManager with configuration settings.
+
+        Args:
+            config_path (str): Path to the YAML configuration file. Defaults to "config.yml".
+        """
         load_dotenv()
 
         with open(config_path, "r") as config_file:
@@ -13,7 +27,12 @@ class ConfigManager:
 
         self._process_config(self.config)
 
-    def _process_config(self, config: Dict[str, Any]):
+    def _process_config(self, config: Dict[str, Any]) -> None:
+        """Process the configuration dictionary to substitute environment variables.
+
+        Args:
+            config (Dict[str, Any]): The configuration dictionary to process.
+        """
         for key, value in config.items():
             if isinstance(value, dict):
                 self._process_config(value)
@@ -24,6 +43,15 @@ class ConfigManager:
                 config[key] = os.getenv(env_var, value)
 
     def get(self, *keys: str, default: Any = None) -> Any:
+        """Retrieve a configuration value based on a sequence of keys.
+
+        Args:
+            *keys (str): The sequence of keys to access nested values in the configuration.
+            default (Any): The default value to return if the key path is not found. Defaults to None.
+
+        Returns:
+            Any: The configuration value associated with the provided keys, or the default value if not found.
+        """
         result = self.config
         for key in keys:
             if isinstance(result, dict):
