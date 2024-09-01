@@ -1,6 +1,6 @@
 import pytest
 import yaml
-from horizon_match.infrastructure.config.config_manager import ConfigManager
+from horizon_scope.infrastructure.config.config_manager import ConfigManager
 
 
 @pytest.fixture

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from horizon_match.domain.entities.project import Project
+from horizon_scope.domain.entities.project import Project
 
 
 class VectorSearchService(ABC):

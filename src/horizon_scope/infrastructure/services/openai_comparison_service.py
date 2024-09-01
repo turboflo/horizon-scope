@@ -1,9 +1,9 @@
 from __future__ import annotations
 from openai import OpenAI
 from typing import List, Dict
-from horizon_match.application.interfaces.comparison_service import ComparisonService
-from horizon_match.domain.entities.comparison import Comparison
-from horizon_match.infrastructure.config.config_manager import ConfigManager
+from horizon_scope.application.interfaces.comparison_service import ComparisonService
+from horizon_scope.domain.entities.comparison import Comparison
+from horizon_scope.infrastructure.config.config_manager import ConfigManager
 
 MAX_PROJECT_LENGTH = 10000
 
@@ -28,10 +28,10 @@ class OpenAIComparisonService(ComparisonService):
         """
         self.config = config
         openai_api_key = self.config.get(
-            "horizon-match", "comparison-service", "api_key"
+            "horizon-scope", "comparison-service", "api_key"
         )
         self.client = OpenAI(api_key=openai_api_key)
-        self.model = self.config.get("horizon-match", "comparison-service", "model")
+        self.model = self.config.get("horizon-scope", "comparison-service", "model")
 
     def compare(self, my_project: str, existing_project: str) -> Comparison:
         """Compare two project descriptions using OpenAI.

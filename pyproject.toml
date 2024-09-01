@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "horizon-match"
+name = "horizon-scope"
 version = "0.0.1"
 description = ""
 authors = ["Florian Hegenbarth <florian@hegenbarth.dev>"]
 readme = "README.md"
-packages = [{ include = "horizon_match", from = "src" }]
+packages = [{ include = "horizon_scope", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"

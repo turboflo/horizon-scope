@@ -1,13 +1,13 @@
 
-# Horizon Match ✨📑
+# Horizon Scope ✨📑
 
-[![CI](https://github.com/turboflo/horizon-match/actions/workflows/ci.yml/badge.svg?branch=development)](https://github.com/turboflo/horizon-match/actions/workflows/ci.yml)
-![GitHub Release](https://img.shields.io/github/v/release/turboflo/horizon-match)
-![GitHub contributors](https://img.shields.io/github/contributors/turboflo/horizon-match)
+[![CI](https://github.com/turboflo/horizon-scope/actions/workflows/ci.yml/badge.svg?branch=development)](https://github.com/turboflo/horizon-scope/actions/workflows/ci.yml)
+![GitHub Release](https://img.shields.io/github/v/release/turboflo/horizon-scope)
+![GitHub contributors](https://img.shields.io/github/contributors/turboflo/horizon-scope)
 
 
 
-**Horizon Match** is a project comparison and analysis tool that leverages vector search and AI-powered comparisons to help users discover similar projects and gain valuable insights.
+**Horizon Scope** is a project comparison and analysis tool that leverages vector search and AI-powered comparisons to help users discover similar projects and gain valuable insights.
 
 ## Key Features 🌟
 
@@ -20,7 +20,7 @@
 
 ## Components 🧩
 
-- **`HorizonMatchClient`**: Main client class interfacing with core functionalities.
+- **`HorizonScopeClient`**: Main client class interfacing with core functionalities.
 - **`VectorSearchService`**: Manages vector-based similarity searches using Pinecone.
 - **`ComparisonService`**: Handles AI-powered project comparisons using OpenAI.
 - **Streamlit Web Application**: Interactive interface for project comparisons.

@@ -1,20 +1,20 @@
 import pytest
 from unittest.mock import Mock, patch
 import json
-from horizon_match.infrastructure.services.openai_comparison_service import (
+from horizon_scope.infrastructure.services.openai_comparison_service import (
     OpenAIComparisonService,
     MAX_PROJECT_LENGTH,
 )
-from horizon_match.domain.entities.comparison import Comparison
-from horizon_match.infrastructure.config.config_manager import ConfigManager
+from horizon_scope.domain.entities.comparison import Comparison
+from horizon_scope.infrastructure.config.config_manager import ConfigManager
 
 
 @pytest.fixture
 def mock_config():
     config = Mock(spec=ConfigManager)
     config.get.side_effect = lambda *args: {
-        ("horizon-match", "comparison-service", "api_key"): "test_openai_api_key",
-        ("horizon-match", "comparison-service", "model"): "gpt-4",
+        ("horizon-scope", "comparison-service", "api_key"): "test_openai_api_key",
+        ("horizon-scope", "comparison-service", "model"): "gpt-4",
     }[args]
     return config
 
@@ -27,7 +27,7 @@ def mock_openai_client():
 @pytest.fixture
 def comparison_service(mock_config, mock_openai_client):
     with patch(
-        "horizon_match.infrastructure.services.openai_comparison_service.OpenAI"
+        "horizon_scope.infrastructure.services.openai_comparison_service.OpenAI"
     ) as mock_openai:
         mock_openai.return_value = mock_openai_client
         return OpenAIComparisonService(mock_config)
@@ -35,12 +35,12 @@ def comparison_service(mock_config, mock_openai_client):
 
 def test_initialization(mock_config):
     with patch(
-        "horizon_match.infrastructure.services.openai_comparison_service.OpenAI"
+        "horizon_scope.infrastructure.services.openai_comparison_service.OpenAI"
     ) as mock_openai:
         service = OpenAIComparisonService(mock_config)
 
-    mock_config.get.assert_any_call("horizon-match", "comparison-service", "api_key")
-    mock_config.get.assert_any_call("horizon-match", "comparison-service", "model")
+    mock_config.get.assert_any_call("horizon-scope", "comparison-service", "api_key")
+    mock_config.get.assert_any_call("horizon-scope", "comparison-service", "model")
     mock_openai.assert_called_once_with(api_key="test_openai_api_key")
     assert service.model == "gpt-4"
 

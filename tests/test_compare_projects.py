@@ -2,12 +2,12 @@ import pytest
 from unittest.mock import Mock, MagicMock
 from typing import List
 
-from horizon_match.application.interfaces.vector_search_service import (
+from horizon_scope.application.interfaces.vector_search_service import (
     VectorSearchService,
 )
-from horizon_match.application.interfaces.comparison_service import ComparisonService
-from horizon_match.domain.entities.horizon_match_result import HorizonMatchResult
-from horizon_match.application.use_cases.compare_projects import CompareProjects
+from horizon_scope.application.interfaces.comparison_service import ComparisonService
+from horizon_scope.domain.entities.horizon_scope_result import HorizonScopeResult
+from horizon_scope.application.use_cases.compare_projects import CompareProjects
 
 
 class MockProject:
@@ -92,7 +92,7 @@ def test_execute_returns_horizon_match_results(
     results = compare_projects.execute(query, k)
 
     # Assert
-    assert isinstance(results[0], HorizonMatchResult)
+    assert isinstance(results[0], HorizonScopeResult)
     assert results[0].project == mock_project
     assert results[0].comparison.score == 0.5
 
