@@ -1,76 +1,78 @@
-name: CI
+name: AI CI
 
 on:
   push:
-    branches: [development]
+    branches: [ development ]
   pull_request:
-    branches: [development]
+    branches: [ development ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ secrets.PAT }}  # Use PAT instead of GITHUB_TOKEN
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
+      with:
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
 
-      - name: Install dependencies
-        run: |
-          poetry install --no-interaction --with dev
+    - name: Install dependencies
+      run: |
+        poetry install --no-interaction --with dev
 
-      - name: Display installed packages
-        run: |
-          poetry show
+    - name: Display installed packages
+      run: |
+        poetry show
 
-      - name: Investigate Pinecone library
-        run: |
-          echo "Pinecone library content:"
-          cat .venv/lib/python3.11/site-packages/pinecone/control/pinecone.py
+    - name: Investigate Pinecone library
+      run: |
+        echo "Pinecone library content:"
+        cat .venv/lib/python3.11/site-packages/pinecone/control/pinecone.py
 
-      - name: Run unit tests with coverage report
-        run: |
-          poetry run python -m pytest -v --cov=./src --cov-report term-missing:skip-covered tests || echo "Some tests failed, but continuing workflow"
+    - name: Run unit tests with coverage report
+      run: |
+        poetry run python -m pytest -v --cov=./src --cov-report term-missing:skip-covered tests || echo "Some tests failed, but continuing workflow"
 
-      - name: Check coverage
-        run: |
-          poetry run coverage report -m
-          COVERAGE=$(poetry run coverage report -m | grep -Po '^TOTAL.*\s(\d+%)$' | awk '{sub("%", "", $NF); print $NF}')
-          echo "Coverage is $COVERAGE%"
-          if [ "$COVERAGE" -lt "70" ]; then
-            echo "Warning: Coverage is below 70%"
-          fi
+    - name: Check coverage
+      run: |
+        poetry run coverage report -m
+        COVERAGE=$(poetry run coverage report -m | grep -Po '^TOTAL.*\s(\d+%)$' | awk '{sub("%", "", $NF); print $NF}')
+        echo "Coverage is $COVERAGE%"
+        if [ "$COVERAGE" -lt "70" ]; then
+          echo "Warning: Coverage is below 70%"
+        fi
 
-      - name: Prepare for release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git checkout -b temp-release-branch
+    - name: Prepare for release
+      if: github.event_name == 'push' && github.ref == 'refs/heads/development'
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
 
-      - name: Python Semantic Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          poetry run semantic-release version
-          poetry run semantic-release publish
+    - name: Python Semantic Release
+      if: github.event_name == 'push' && github.ref == 'refs/heads/development'
+      env:
+        GH_TOKEN: ${{ secrets.PAT }}
+      run: |
+        poetry run semantic-release version
+        poetry run semantic-release publish
 
-      - name: Push changes
-        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
-        run: |
-          git push --follow-tags origin temp-release-branch:development
-          git push origin development:main
+    - name: Push changes
+      if: github.event_name == 'push' && github.ref == 'refs/heads/development'
+      env:
+        GH_TOKEN: ${{ secrets.PAT }}
+      run: |
+        git push --follow-tags origin HEAD:development
+        git push origin development:main
