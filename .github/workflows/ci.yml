@@ -1,21 +1,20 @@
 name: CI
 
-# Define variables for reuse
-variables:
-  PYTHON_VERSION: "3.11"
-  COVERAGE_THRESHOLD: 60
-  BRANCH: development
-
 on:
   push:
-    branches: [$BRANCH]
+    branches: [development]
   pull_request:
-    branches: [$BRANCH]
-  workflow_dispatch: # This adds a manual trigger option
+    branches: [development]
+  workflow_dispatch: # Manual trigger
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    env: # Define environment variables here
+      PYTHON_VERSION: "3.11"
+      COVERAGE_THRESHOLD: 60
+      BRANCH: development
 
     steps:
       - name: Checkout repository
