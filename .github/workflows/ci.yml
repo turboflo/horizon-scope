@@ -11,6 +11,7 @@ on:
     branches: [$BRANCH]
   pull_request:
     branches: [$BRANCH]
+  workflow_dispatch: # This adds a manual trigger option
 
 jobs:
   test:
