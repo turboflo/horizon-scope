@@ -1,5 +1,5 @@
 import streamlit as st
-from horizon_match.presentation.horizon_match_client import HorizonMatchClient
+from horizon_scope.presentation.horizon_scope_client import HorizonScopeClient
 import os
 
 
@@ -34,7 +34,7 @@ def main():
     # Sidebar
     with st.sidebar:
         st.markdown("### ℹ️ About")
-        st.markdown("🌐 [GitHub Repository](https://github.com/turboflo/horizon-match)")
+        st.markdown("🌐 [GitHub Repository](https://github.com/turboflo/horizon-scope)")
         st.markdown(
             "📧 Contact: [florian@hegenbarth.dev](mailto:florian@hegenbarth.dev)"
         )
@@ -47,7 +47,7 @@ def main():
     config_path = os.path.join(
         os.path.dirname(__file__), "..", "..", "..", "config.yml"
     )
-    client = HorizonMatchClient.from_config(config_path)
+    client = HorizonScopeClient.from_config(config_path)
 
     # User input form
     with st.form(key="input_form"):

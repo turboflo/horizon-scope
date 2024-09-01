@@ -1,19 +1,19 @@
 from __future__ import annotations
 from typing import Any
-from horizon_match.application.use_cases.compare_projects import CompareProjects
-from horizon_match.domain.entities.horizon_match_result import HorizonMatchResult
-from horizon_match.infrastructure.services.pinecone_search_service import (
+from horizon_scope.application.use_cases.compare_projects import CompareProjects
+from horizon_scope.domain.entities.horizon_scope_result import HorizonScopeResult
+from horizon_scope.infrastructure.services.pinecone_search_service import (
     PineconeSearchService,
 )
-from horizon_match.infrastructure.services.openai_comparison_service import (
+from horizon_scope.infrastructure.services.openai_comparison_service import (
     OpenAIComparisonService,
 )
-from horizon_match.infrastructure.config.config_manager import ConfigManager
-from horizon_match.domain.entities.project import Project
+from horizon_scope.infrastructure.config.config_manager import ConfigManager
+from horizon_scope.domain.entities.project import Project
 
 
-class HorizonMatchClient:
-    """Client for handling horizon match operations.
+class HorizonScopeClient:
+    """Client for handling horizon scope operations.
 
     Attributes:
         config_manager (ConfigManager): Configuration manager for the client.
@@ -23,7 +23,7 @@ class HorizonMatchClient:
     """
 
     def __init__(self, config_manager: ConfigManager) -> None:
-        """Initialize the HorizonMatchClient with a configuration manager.
+        """Initialize the HorizonScopeClient with a configuration manager.
 
         Args:
             config_manager (ConfigManager): The configuration manager to use for setting up services.
@@ -36,19 +36,19 @@ class HorizonMatchClient:
         )
 
     @classmethod
-    def from_config(cls, config_path: str = "config.yml") -> HorizonMatchClient:
-        """Create a HorizonMatchClient instance from a configuration file.
+    def from_config(cls, config_path: str = "config.yml") -> HorizonScopeClient:
+        """Create a HorizonScopeClient instance from a configuration file.
 
         Args:
             config_path (str, optional): Path to the configuration file. Defaults to "config.yml".
 
         Returns:
-            HorizonMatchClient: An instance of HorizonMatchClient initialized with the given configuration.
+            HorizonScopeClient: An instance of HorizonScopeClient initialized with the given configuration.
         """
         config = ConfigManager(config_path)
         return cls(config)
 
-    def match(self, query: str, k: int) -> list[HorizonMatchResult]:
+    def match(self, query: str, k: int) -> list[HorizonScopeResult]:
         """Perform a match operation using the provided query.
 
         Args:
@@ -56,7 +56,7 @@ class HorizonMatchClient:
             k (int): The number of results to return.
 
         Returns:
-            list[HorizonMatchResult]: A list of HorizonMatchResult objects matching the query.
+            list[HorizonScopeResult]: A list of HorizonScopeResult objects matching the query.
         """
         return self.compare_projects_use_case.execute(query, k)
 

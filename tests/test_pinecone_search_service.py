@@ -1,11 +1,11 @@
 import pytest
 from unittest.mock import Mock, patch
 from datetime import datetime
-from horizon_match.infrastructure.services.pinecone_search_service import (
+from horizon_scope.infrastructure.services.pinecone_search_service import (
     PineconeSearchService,
 )
-from horizon_match.domain.entities.project import Project
-from horizon_match.infrastructure.config.config_manager import ConfigManager
+from horizon_scope.domain.entities.project import Project
+from horizon_scope.infrastructure.config.config_manager import ConfigManager
 
 
 @pytest.fixture
@@ -13,20 +13,20 @@ def mock_config():
     config = Mock(spec=ConfigManager)
     config.get.side_effect = lambda *args: {
         (
-            "horizon-match",
+            "horizon-scope",
             "vector-search-service",
             "store",
             "api_key",
         ): "test_pinecone_api_key",
-        ("horizon-match", "vector-search-service", "store", "index"): "test_index",
+        ("horizon-scope", "vector-search-service", "store", "index"): "test_index",
         (
-            "horizon-match",
+            "horizon-scope",
             "vector-search-service",
             "embeddings",
             "api_key",
         ): "test_openai_api_key",
         (
-            "horizon-match",
+            "horizon-scope",
             "vector-search-service",
             "embeddings",
             "model",
@@ -48,11 +48,11 @@ def mock_openai_client():
 @pytest.fixture
 def pinecone_search_service(mock_config, mock_pinecone_index, mock_openai_client):
     with patch(
-        "horizon_match.infrastructure.services.pinecone_search_service.Pinecone"
+        "horizon_scope.infrastructure.services.pinecone_search_service.Pinecone"
     ) as mock_pinecone:
         mock_pinecone.return_value.Index.return_value = mock_pinecone_index
         with patch(
-            "horizon_match.infrastructure.services.pinecone_search_service.OpenAI"
+            "horizon_scope.infrastructure.services.pinecone_search_service.OpenAI"
         ) as mock_openai:
             mock_openai.return_value = mock_openai_client
             return PineconeSearchService(mock_config)
@@ -165,7 +165,7 @@ def test_index_project_without_content_update_date(
 
     # Act
     with patch(
-        "horizon_match.infrastructure.services.pinecone_search_service.datetime"
+        "horizon_scope.infrastructure.services.pinecone_search_service.datetime"
     ) as mock_datetime:
         mock_now = datetime(2023, 1, 1, 12, 0, 0)
         mock_datetime.now.return_value = mock_now
@@ -180,10 +180,10 @@ def test_index_project_without_content_update_date(
 def test_initialization(mock_config):
     # Act
     with patch(
-        "horizon_match.infrastructure.services.pinecone_search_service.Pinecone"
+        "horizon_scope.infrastructure.services.pinecone_search_service.Pinecone"
     ) as mock_pinecone:
         with patch(
-            "horizon_match.infrastructure.services.pinecone_search_service.OpenAI"
+            "horizon_scope.infrastructure.services.pinecone_search_service.OpenAI"
         ) as mock_openai:
             PineconeSearchService(mock_config)
 

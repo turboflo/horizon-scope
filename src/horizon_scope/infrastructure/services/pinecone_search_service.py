@@ -3,11 +3,11 @@ from pinecone import Pinecone
 from openai import OpenAI
 from typing import List
 from datetime import datetime
-from horizon_match.application.interfaces.vector_search_service import (
+from horizon_scope.application.interfaces.vector_search_service import (
     VectorSearchService,
 )
-from horizon_match.domain.entities.project import Project
-from horizon_match.infrastructure.config.config_manager import ConfigManager
+from horizon_scope.domain.entities.project import Project
+from horizon_scope.infrastructure.config.config_manager import ConfigManager
 
 
 class PineconeSearchService(VectorSearchService):
@@ -31,20 +31,20 @@ class PineconeSearchService(VectorSearchService):
         self.config = config
         # Initialize Pinecone
         pinecone_api_key = self.config.get(
-            "horizon-match", "vector-search-service", "store", "api_key"
+            "horizon-scope", "vector-search-service", "store", "api_key"
         )
         pc = Pinecone(api_key=pinecone_api_key)
         index_name = self.config.get(
-            "horizon-match", "vector-search-service", "store", "index"
+            "horizon-scope", "vector-search-service", "store", "index"
         )
         self.index = pc.Index(index_name)
         # Initialize OpenAI client for embeddings
         openai_api_key = self.config.get(
-            "horizon-match", "vector-search-service", "embeddings", "api_key"
+            "horizon-scope", "vector-search-service", "embeddings", "api_key"
         )
         self.openai_client = OpenAI(api_key=openai_api_key)
         self.embedding_model = self.config.get(
-            "horizon-match", "vector-search-service", "embeddings", "model"
+            "horizon-scope", "vector-search-service", "embeddings", "model"
         )
 
     def search(self, query: str, k: int) -> List[Project]:

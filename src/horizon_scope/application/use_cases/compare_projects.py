@@ -1,9 +1,9 @@
 from typing import List
-from horizon_match.application.interfaces.vector_search_service import (
+from horizon_scope.application.interfaces.vector_search_service import (
     VectorSearchService,
 )
-from horizon_match.application.interfaces.comparison_service import ComparisonService
-from horizon_match.domain.entities.horizon_match_result import HorizonMatchResult
+from horizon_scope.application.interfaces.comparison_service import ComparisonService
+from horizon_scope.domain.entities.horizon_scope_result import HorizonScopeResult
 
 
 class CompareProjects:
@@ -32,7 +32,7 @@ class CompareProjects:
         self.vector_search_service = vector_search_service
         self.comparison_service = comparison_service
 
-    def execute(self, query: str, k: int) -> List[HorizonMatchResult]:
+    def execute(self, query: str, k: int) -> List[HorizonScopeResult]:
         """Perform the comparison of the query project with similar projects.
 
         Args:
@@ -40,17 +40,17 @@ class CompareProjects:
             k (int): The number of similar projects to retrieve and compare.
 
         Returns:
-            List[HorizonMatchResult]: A list of HorizonMatchResult objects, sorted by similarity score in descending order.
+            List[HorizonScopeResult]: A list of HorizonScopeResult objects, sorted by similarity score in descending order.
         """
         # Perform vector search to find similar projects
         similar_projects = self.vector_search_service.search(query, k)
 
         # Compare the query with each similar project
-        results: List[HorizonMatchResult] = []
+        results: List[HorizonScopeResult] = []
         for project in similar_projects:
             # Compare the query description with the project description
             comparison = self.comparison_service.compare(query, project.description)
-            result = HorizonMatchResult(project=project, comparison=comparison)
+            result = HorizonScopeResult(project=project, comparison=comparison)
             results.append(result)
 
         # Sort results by AI similarity score in descending order
