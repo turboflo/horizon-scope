@@ -40,7 +40,7 @@ def main():
         )
         st.markdown("👤 Created by: Florian Hegenbarth")
 
-    st.title("🚀 Horizon Match")
+    st.title("✨📑 Horizon Match")
     st.subheader("Discover similar projects and gain insights")
 
     # Initialize client

@@ -1,5 +1,5 @@
 
-# Horizon Match 🚀
+# Horizon Match ✨📑
 
 [![CI](https://github.com/turboflo/horizon-match/actions/workflows/ci.yml/badge.svg?branch=development)](https://github.com/turboflo/horizon-match/actions/workflows/ci.yml)
 ![GitHub Release](https://img.shields.io/github/v/release/turboflo/horizon-match)
