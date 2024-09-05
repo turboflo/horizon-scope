@@ -1,13 +1,18 @@
-
 # Horizon Scope ✨📑
 
-[![CI](https://github.com/turboflo/horizon-scope/actions/workflows/ci.yml/badge.svg?branch=development)](https://github.com/turboflo/horizon-scope/actions/workflows/ci.yml)
-![GitHub Release](https://img.shields.io/github/v/release/turboflo/horizon-scope)
-![GitHub contributors](https://img.shields.io/github/contributors/turboflo/horizon-scope)
+[![CI](https://img.shields.io/github/actions/workflow/status/turboflo/horizon-scope/ci.yml?branch=development&flat&logo=github&label=CI)](https://github.com/turboflo/horizon-scope/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/turboflo/horizon-scope?style=fflat&logo=github)](https://github.com/turboflo/horizon-scope/releases)
+[![GitHub contributors](https://img.shields.io/github/contributors/turboflo/horizon-scope?style=flat&logo=github)](https://github.com/turboflo/horizon-scope/graphs/contributors)
 
 
 
 **Horizon Scope** is a project comparison and analysis tool that leverages vector search and AI-powered comparisons to help users discover similar projects and gain valuable insights.
+
+## Try It Out 🚀
+
+Experience Horizon Scope in action! Visit my live demo:
+
+[![Streamlit App](https://img.shields.io/badge/Streamlit-Open_App-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white)](https://horizon-scope.streamlit.app)
 
 ## Key Features 🌟
 
@@ -62,4 +67,3 @@ This tool uses project data embedded from the following sources:
 - [Pinecone](https://www.pinecone.io/) for vector similarity search.
 - [OpenAI](https://openai.com/) for AI-powered project comparison models.
 - [Streamlit](https://streamlit.io/) for the web interface framework.
-
