@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## v0.0.2 (2024-09-05)
+
+### Chore
+
+* chore: Update pyproject.toml for semantic release configuration ([`7092fa8`](https://github.com/turboflo/horizon-scope/commit/7092fa8767bf7665673b6654aa190874b92d48b1))
+
+* chore: Update import statement for streamlit presentation module ([`c888485`](https://github.com/turboflo/horizon-scope/commit/c8884855f2e3aeb0fa051eb78a6329a313c3b7e5))
+
+* chore: Renamed streamlit files ([`7360d6b`](https://github.com/turboflo/horizon-scope/commit/7360d6b132641f824abee4301e42816b851a96a4))
+
+* chore: Add no key in env support ([`a80169f`](https://github.com/turboflo/horizon-scope/commit/a80169f004017e3e85e3d50497a840142559e675))
+
+### Unknown
+
+* Added Dev Container Folder ([`ee6f9aa`](https://github.com/turboflo/horizon-scope/commit/ee6f9aa2ce7ed6976da17f41a21c69335a9aeba6))
+
+* Update README.md ([`12b4202`](https://github.com/turboflo/horizon-scope/commit/12b42023010854f75ed7ca6341bf1e7b3ea65eb2))
+
 ## v0.0.1 (2024-09-01)
 
 ### Chore
