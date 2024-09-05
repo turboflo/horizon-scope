@@ -40,7 +40,9 @@ class ConfigManager:
                 isinstance(value, str) and value.startswith("{") and value.endswith("}")
             ):
                 env_var = value.strip("{}")
-                config[key] = os.getenv(env_var, value)
+                config[key] = (
+                    os.getenv(env_var) if os.getenv(env_var) is not None else None
+                )
 
     def get(self, *keys: str, default: Any = None) -> Any:
         """Retrieve a configuration value based on a sequence of keys.
@@ -59,3 +61,15 @@ class ConfigManager:
             else:
                 return default
         return result
+
+    def is_openai_api_key_set(self) -> bool:
+        """Überprüft, ob der OpenAI API-Schlüssel gesetzt ist.
+
+        Returns:
+            bool: True, wenn der API-Schlüssel gesetzt ist, sonst False.
+        """
+        comparison_key = self.get("horizon-scope", "comparison-service", "api_key")
+        # embedding_key = self.get(
+        #     "horizon-scope", "vector-search-service", "embeddings", "api_key"
+        # )
+        return bool(comparison_key)

@@ -1,3 +1,4 @@
+from horizon_scope.infrastructure.config.config_manager import ConfigManager
 import streamlit as st
 from horizon_scope.presentation.horizon_scope_client import HorizonScopeClient
 import os
@@ -31,6 +32,28 @@ def main():
     )
     initialize_session_state()
 
+    # Initialize config
+    config_path = os.path.join(
+        os.path.dirname(__file__), "..", "..", "..", "config.yml"
+    )
+    config_manager = ConfigManager(config_path)
+
+    # Check if OpenAI API key is set
+    if not config_manager.is_openai_api_key_set():
+        st.warning("OpenAI API key not found. Please enter it below.")
+        api_key = st.text_input("OpenAI API key:", type="password")
+        if api_key:
+            os.environ["OPENAI_API_KEY"] = api_key
+            st.success("API key set. Please reload the page.")
+
+            st.rerun()
+        else:
+            # st.error("Please enter an API key.")
+            st.stop()
+
+    # Initialize client
+    client = HorizonScopeClient.from_config(config_path)
+
     # Sidebar
     with st.sidebar:
         st.markdown("### ℹ️ About")
@@ -42,12 +65,6 @@ def main():
 
     st.title("✨📑 Horizon Match")
     st.subheader("Discover similar projects and gain insights")
-
-    # Initialize client
-    config_path = os.path.join(
-        os.path.dirname(__file__), "..", "..", "..", "config.yml"
-    )
-    client = HorizonScopeClient.from_config(config_path)
 
     # User input form
     with st.form(key="input_form"):
@@ -72,6 +89,7 @@ def main():
         st.session_state.project_description = project_description
         st.session_state.k = k
         start_comparison()
+        st.rerun()
 
     if st.session_state.comparing:
         if st.session_state.project_description:
