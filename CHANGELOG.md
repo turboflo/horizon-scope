@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v0.0.3 (2024-09-11)
+
+### Chore
+
+* chore: Cache Poetry dependencies and virtual environment in CI ([`74e73ea`](https://github.com/turboflo/horizon-scope/commit/74e73ea9e121f10b8c2aa159e8363f5fceb27056))
+
+* chore: Add src directory to Python path in streamlit_app.py ([`82bbb41`](https://github.com/turboflo/horizon-scope/commit/82bbb41e788146f271b7e9cdaa41b8cfdd6f7056))
+
+### Unknown
+
+* Add dotenv to requirements.txt ([`fc0c63a`](https://github.com/turboflo/horizon-scope/commit/fc0c63a86d45b464a744452e43fed943be1f2f18))
+
 ## v0.0.2 (2024-09-05)
 
 ### Chore
