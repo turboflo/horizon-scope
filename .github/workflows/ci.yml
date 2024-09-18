@@ -78,6 +78,7 @@ jobs:
           fi
 
       - name: Python Semantic Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -87,6 +88,7 @@ jobs:
           poetry run semantic-release publish
 
       - name: Check if release was created
+        if: github.event_name == 'push' && github.ref == 'refs/heads/development'
         id: check-release
         run: |
           if [ -n "$(git tag --points-at HEAD)" ]; then
@@ -96,8 +98,8 @@ jobs:
           fi
 
       - name: Merge development into main if release created
-        if: ${{ env.RELEASE_CREATED == 'true' }}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/development' && env.RELEASE_CREATED == 'true'
         run: |
           git checkout main
-          git merge --ff-only $BRANCH
+          git merge --ff-only ${{ env.BRANCH }}
           git push origin main

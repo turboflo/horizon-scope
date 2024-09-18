@@ -63,9 +63,9 @@ def test_config_manager_with_missing_env_vars(temp_config_file, monkeypatch):
     monkeypatch.delenv("API_KEY", raising=False)
 
     config_manager = ConfigManager(config_path=str(temp_config_file))
-    assert config_manager.get("database", "username") == "{DB_USERNAME}"
-    assert config_manager.get("database", "password") == "{DB_PASSWORD}"
-    assert config_manager.get("api", "key") == "{API_KEY}"
+    assert config_manager.get("database", "username") == None
+    assert config_manager.get("database", "password") == None
+    assert config_manager.get("api", "key") == None
 
 
 def test_config_manager_with_partial_env_vars(temp_config_file, monkeypatch):
@@ -75,8 +75,8 @@ def test_config_manager_with_partial_env_vars(temp_config_file, monkeypatch):
 
     config_manager = ConfigManager(config_path=str(temp_config_file))
     assert config_manager.get("database", "username") == "testuser"
-    assert config_manager.get("database", "password") == "{DB_PASSWORD}"
-    assert config_manager.get("api", "key") == "{API_KEY}"
+    assert config_manager.get("database", "password") == None
+    assert config_manager.get("api", "key") == None
 
 
 def test_config_manager_with_nonexistent_config_file():

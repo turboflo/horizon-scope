@@ -8,17 +8,25 @@ from horizon_scope.application.interfaces.vector_search_service import (
 from horizon_scope.application.interfaces.comparison_service import ComparisonService
 from horizon_scope.domain.entities.horizon_scope_result import HorizonScopeResult
 from horizon_scope.application.use_cases.compare_projects import CompareProjects
+from horizon_scope.domain.entities.comparison import Comparison
+from horizon_scope.domain.entities.project import Project
 
 
-class MockProject:
+class MockProject(Project):
     def __init__(self, id: str, description: str):
-        self.id = id
-        self.description = description
+        super().__init__(id=id, description=description)
 
 
-class MockComparison:
+class MockComparison(Comparison):
     def __init__(self, score: float):
-        self.score = score
+        super().__init__(
+            score=score,
+            summary="Mock summary",
+            similarity="Mock similarity",
+            difference="Mock difference",
+            confidence=0.8,
+            reason="Mock reason",
+        )
 
 
 @pytest.fixture

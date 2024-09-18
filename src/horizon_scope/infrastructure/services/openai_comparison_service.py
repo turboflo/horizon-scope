@@ -51,14 +51,20 @@ class OpenAIComparisonService(ComparisonService):
 
         messages = self._create_comparison_prompt(my_project, existing_project)
 
-        completion = self.client.chat.completions.create(
+        # completion = self.client.chat.completions.create(
+        #     model=self.model,
+        #     messages=messages,
+        #     response_format={"type": "json_object"},
+        # )
+        completion = self.client.beta.chat.completions.parse(
             model=self.model,
             messages=messages,
-            response_format={"type": "json_object"},
+            response_format=Comparison,
         )
 
-        response_content = completion.choices[0].message.content
-        return Comparison.model_validate_json(response_content)
+        # response_content = completion.choices[0].message.content
+        # return Comparison.model_validate_json(response_content)
+        return completion.choices[0].message.parsed
 
     def _validate_input(self, project: str, project_name: str) -> None:
         """Validate the project description input.
