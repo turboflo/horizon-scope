@@ -28,7 +28,7 @@ def toggle_description(i):
 
 def main():
     st.set_page_config(
-        page_title="Horizon Match", layout="wide", initial_sidebar_state="expanded"
+        page_title="Horizon Match", layout="wide", initial_sidebar_state="collapsed"
     )
     initialize_session_state()
 
