@@ -1,8 +1,20 @@
 # CHANGELOG
 
+## v0.0.6 (2024-09-18)
+
+### Chore
+
+* chore: Update python-dotenv dependency to version 1.0.1 ([`72ea036`](https://github.com/turboflo/horizon-scope/commit/72ea03623ed91552ae2a5d7877b02a6e2b613703))
+
+### Unknown
+
+* Merge branch &#39;development&#39; of https://github.com/turboflo/horizon-scope into development ([`0cb540e`](https://github.com/turboflo/horizon-scope/commit/0cb540edc5cd920831d2032b37876ba2686d3504))
+
 ## v0.0.5 (2024-09-18)
 
 ### Chore
+
+* chore: Update requirements.txt ([`bd6385a`](https://github.com/turboflo/horizon-scope/commit/bd6385af1f780c4ed9fe25c5d660444359a781a3))
 
 * chore: Add src directory to Python path in streamlit_app.py ([`22d425c`](https://github.com/turboflo/horizon-scope/commit/22d425c113ff33fee06d727acc7a589c01a0b0a2))
 
