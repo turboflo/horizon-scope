@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.0.5 (2024-09-18)
+
+### Chore
+
+* chore: Add src directory to Python path in streamlit_app.py ([`22d425c`](https://github.com/turboflo/horizon-scope/commit/22d425c113ff33fee06d727acc7a589c01a0b0a2))
+
 ## v0.0.4 (2024-09-18)
 
 ### Chore
