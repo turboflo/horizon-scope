@@ -1,8 +1,16 @@
 # CHANGELOG
 
+## v0.0.7 (2024-09-18)
+
+### Unknown
+
+* Merge branch &#39;development&#39; of https://github.com/turboflo/horizon-scope into development ([`0fde532`](https://github.com/turboflo/horizon-scope/commit/0fde53249ee69f553ce80449ceb883d8aa41554b))
+
 ## v0.0.6 (2024-09-18)
 
 ### Chore
+
+* chore: Update initial sidebar state to collapsed ([`b58297c`](https://github.com/turboflo/horizon-scope/commit/b58297cf310d1603361fde3d457c069430694453))
 
 * chore: Update python-dotenv dependency to version 1.0.1 ([`72ea036`](https://github.com/turboflo/horizon-scope/commit/72ea03623ed91552ae2a5d7877b02a6e2b613703))
 
