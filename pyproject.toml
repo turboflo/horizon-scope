@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "horizon-scope"
-version = "0.0.3"
+version = "0.0.4"
 description = ""
 authors = ["Florian Hegenbarth <florian@hegenbarth.dev>"]
 readme = "README.md"

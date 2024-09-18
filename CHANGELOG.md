@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## v0.0.4 (2024-09-18)
+
+### Chore
+
+* chore: Add MockProject and MockComparison classes for testing ([`cb89c2e`](https://github.com/turboflo/horizon-scope/commit/cb89c2e8c0b5556ad1e29fa966ab157d902bb3c8))
+
+* chore: Update CI workflow to merge development into main if release created ([`da0598f`](https://github.com/turboflo/horizon-scope/commit/da0598f60b52122919e91876a235dc5cc484788f))
+
+### Fix
+
+* fix: Fixed OpenAI output ([`226f833`](https://github.com/turboflo/horizon-scope/commit/226f833409c0efdb25c975f88940cde28ba2086c))
+
+### Unknown
+
+* Merge pull request #11 from turboflo/bug-fix
+
+fix: Fixed OpenAI output ([`050ae9d`](https://github.com/turboflo/horizon-scope/commit/050ae9da1e0a8d7dee072e3aa1f44deb5e84fbea))
+
 ## v0.0.3 (2024-09-11)
 
 ### Chore
