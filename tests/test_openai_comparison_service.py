@@ -74,21 +74,19 @@ def test_compare(comparison_service, mock_openai_client):
     )
 
     mock_response = Mock()
-    mock_response.choices = [
-        Mock(message=Mock(content=json.dumps(mock_comparison.model_dump())))
-    ]
-    mock_openai_client.chat.completions.create.return_value = mock_response
+    mock_response.choices = [Mock(message=Mock(parsed=mock_comparison))]
+    mock_openai_client.beta.chat.completions.parse.return_value = mock_response
 
     result = comparison_service.compare(my_project, existing_project)
 
     assert isinstance(result, Comparison)
     assert result == mock_comparison
-    mock_openai_client.chat.completions.create.assert_called_once_with(
-        model="gpt-4",
+    mock_openai_client.beta.chat.completions.parse.assert_called_once_with(
+        model=comparison_service.,
         messages=comparison_service._create_comparison_prompt(
             my_project, existing_project
         ),
-        response_format={"type": "json_object"},
+        response_format=Comparison,
     )
 
 
