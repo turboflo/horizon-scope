@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Any
 from horizon_scope.application.use_cases.compare_projects import CompareProjects
+from horizon_scope.domain.entities.comparison import Comparison
 from horizon_scope.domain.entities.horizon_scope_result import HorizonScopeResult
 from horizon_scope.infrastructure.services.pinecone_search_service import (
     PineconeSearchService,
@@ -79,6 +80,18 @@ class HorizonScopeClient:
             list[Project]: A list of Project objects matching the search query.
         """
         return self.vector_search_service.search(query, k)
+
+    def compare_projects(self, my_project: str, existing_project: str) -> Comparison:
+        """Compare two projects.
+
+        Args:
+            my_project (str): The description of my project.
+            existing_project (str): The description of the existing project.
+
+        Returns:
+            Comparison: The comparison result between the two projects.
+        """
+        return self.comparison_service.compare(my_project, existing_project)
 
     def get_config(self, *keys: str, default: Any = None) -> Any:
         """Retrieve configuration values based on the provided keys.

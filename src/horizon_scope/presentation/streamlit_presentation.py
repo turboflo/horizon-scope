@@ -26,9 +26,61 @@ def toggle_description(i):
     )
 
 
+def create_project_card(project, index, client, user_project_description):
+    col1, col2, col3 = st.columns([1, 2, 1])
+
+    with col1:
+        st.metric("Similarity", f"{project.similarity*100:.1f}%")
+
+    with col2:
+        st.subheader(project.title or "Untitled Project")
+        st.caption(
+            f"Project ID: {project.id} | Updated: {project.content_update_date or 'Date not available'}"
+        )
+
+    with col3:
+        st.link_button(
+            "🔗 View on CORDIS", f"https://cordis.europa.eu/project/id/{project.id}"
+        )
+        if st.button("🤖 AI Compare", key=f"compare_button_{index}"):
+            st.session_state[f"show_comparison_{index}"] = True
+
+    if st.session_state.get(f"show_comparison_{index}", False):
+        with st.expander("Comparison Results", expanded=True):
+            if f"comparison_{index}" not in st.session_state:
+                with st.spinner("Analyzing projects..."):
+                    comparison = client.compare_projects(
+                        user_project_description,
+                        project.description,
+                    )
+                st.session_state[f"comparison_{index}"] = comparison
+            else:
+                comparison = st.session_state[f"comparison_{index}"]
+
+            col1, col2 = st.columns(2)
+            with col1:
+                st.metric("🤖 AI Similarity", f"{comparison.score*100:.1f}%")
+            with col2:
+                st.metric("🔒 Confidence", f"{comparison.confidence*100:.1f}%")
+
+            st.subheader("Summary")
+            st.write(comparison.summary)
+
+            subcol1, subcol2 = st.columns(2)
+            with subcol1:
+                st.subheader("✅ Similarities")
+                st.write(comparison.similarity)
+            with subcol2:
+                st.subheader("❌ Differences")
+                st.write(comparison.difference)
+
+            st.subheader("🧐 Analysis")
+            st.write(comparison.reason)
+
+
 def main():
     st.set_page_config(
-        page_title="Horizon Match", layout="wide", initial_sidebar_state="collapsed"
+        page_title="Horizon Scope", layout="wide", initial_sidebar_state="collapsed"
     )
     initialize_session_state()
 
@@ -45,10 +97,8 @@ def main():
         if api_key:
             os.environ["OPENAI_API_KEY"] = api_key
             st.success("API key set. Please reload the page.")
-
             st.rerun()
         else:
-            # st.error("Please enter an API key.")
             st.stop()
 
     # Initialize client
@@ -63,7 +113,7 @@ def main():
         )
         st.markdown("👤 Created by: Florian Hegenbarth")
 
-    st.title("✨📑 Horizon Match")
+    st.title("✨📑 Horizon Scope")
     st.subheader("Discover similar projects and gain insights")
 
     # User input form
@@ -72,7 +122,7 @@ def main():
             "✏️ Enter your project description:",
             value=st.session_state.project_description,
             height=150,
-            max_chars=500,
+            max_chars=1000,
         )
 
         k = st.number_input(
@@ -83,85 +133,35 @@ def main():
             step=1,
         )
 
-        submit_button = st.form_submit_button("🔍 Compare Projects")
+        submit_button = st.form_submit_button("🔍 Search Similar Projects")
 
     if submit_button:
         st.session_state.project_description = project_description
         st.session_state.k = k
-        start_comparison()
+        st.session_state.searching = True
         st.rerun()
 
-    if st.session_state.comparing:
+    if st.session_state.get("searching", False):
         if st.session_state.project_description:
-            if st.session_state.results is None:
-                with st.spinner("Analyzing your project..."):
-                    st.session_state.results = client.match(
-                        query=st.session_state.project_description, k=st.session_state.k
-                    )
+            with st.spinner("Searching for similar projects..."):
+                search_results = client.search_projects(
+                    query=st.session_state.project_description, k=st.session_state.k
+                )
 
-            st.header("📊 Comparison Results")
-            for i, result in enumerate(st.session_state.results, 1):
-                with st.expander(
-                    f"#{i}: {result.project.title or 'Untitled Project'}", expanded=True
-                ):
-                    col1, col2, col3 = st.columns([1, 1, 1])
-                    with col1:
-                        st.metric(
-                            "🤖 AI Similarity", f"{result.comparison.score*100:.1f}%"
-                        )
-                    with col2:
-                        st.metric(
-                            "📐 Cosine Similarity",
-                            (
-                                f"{result.project.similarity*100:.1f}%"
-                                if result.project.similarity is not None
-                                else "N/A"
-                            ),
-                        )
-                    with col3:
-                        st.metric(
-                            "🔒 Confidence", f"{result.comparison.confidence*100:.1f}%"
-                        )
+            st.header("📊 Search Results")
+            for i, project in enumerate(search_results, 1):
+                st.divider()
+                create_project_card(
+                    project, i, client, st.session_state.project_description
+                )
 
-                    # Dynamic button text based on current state
-                    button_text = (
-                        "Hide Original Description"
-                        if st.session_state.get(f"show_desc_{i}", False)
-                        else "View Original Description"
-                    )
-
-                    if st.button(
-                        button_text,
-                        key=f"toggle_{i}",
-                        on_click=toggle_description,
-                        args=(i,),
-                    ):
-                        pass
-
-                    if st.session_state.get(f"show_desc_{i}", False):
-                        st.write(result.project.description)
-
-                    st.subheader("📝 Summary")
-                    st.write(result.comparison.summary)
-
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.subheader("✅ Similarities")
-                        st.write(result.comparison.similarity)
-                    with col2:
-                        st.subheader("❌ Differences")
-                        st.write(result.comparison.difference)
-
-                    st.subheader("🧐 Analysis")
-                    st.write(result.comparison.reason)
-
-                    # Project ID and creation date in small text
-                    st.caption(
-                        f"Project ID: {result.project.id} | Content Update: {result.project.content_update_date or 'Date not available'}"
-                    )
         else:
             st.warning("⚠️ Please enter a project description.")
-            st.session_state.comparing = False
+            st.session_state.searching = False
+
+
+if __name__ == "__main__":
+    main()
 
 
 if __name__ == "__main__":

@@ -1,11 +1,11 @@
 from __future__ import annotations
-from openai import OpenAI
 from typing import List, Dict
+from openai import OpenAI
 from horizon_scope.application.interfaces.comparison_service import ComparisonService
 from horizon_scope.domain.entities.comparison import Comparison
 from horizon_scope.infrastructure.config.config_manager import ConfigManager
 
-MAX_PROJECT_LENGTH = 10000
+MAX_PROJECT_LENGTH = 5000
 
 
 class OpenAIComparisonService(ComparisonService):
@@ -105,7 +105,7 @@ class OpenAIComparisonService(ComparisonService):
                 "content": f"""
 Conduct a detailed, academic-level comparison of the following two project descriptions:
 
-1. My project: {my_project}
+1. INPUT: {my_project}
 
 2. Existing EU Horizon project: {existing_project}
 
@@ -131,7 +131,7 @@ Please structure your analysis as follows:
    - Alignment with the EU Horizon program's specific objectives
 
 4. **Similarity Score**: 
-   Assign a similarity score on a scale of 0 to 1 (e.g., 0.85), where 0 indicates no similarity and 1 indicates identical projects. 
+   Assign a similarity score on a scale of 0 to 1 (with two decimal places), where 0 indicates no similarity and 1 indicates identical projects. 
    
    **Calculation Instructions**:
    - **Weighting Factors**: Consider the importance of each aspect (e.g., research objectives might carry more weight than geographical focus). Assign appropriate weight to each factor based on its significance to the overall goals of the projects.
@@ -139,12 +139,18 @@ Please structure your analysis as follows:
    - **Final Score**: Calculate the final score by aggregating the weighted similarities and differences, ensuring that the score accurately reflects the overall resemblance between the two projects.
 
 5. **Confidence Score**:
-   Assign a confidence score on a scale of 0 to 1 (e.g., 0.92), where 0 indicates low confidence and 1 indicates high confidence in the accuracy and reliability of your similarity score and overall analysis.
-   
+   Assign a confidence score on a scale of 0 to 1 (with two decimal places), where 0 indicates low confidence and 1 indicates high confidence in the accuracy and reliability of your similarity score and overall analysis.
    **Calculation Instructions**:
-   - **Input Quality**: Consider the completeness and clarity of the input provided. If the descriptions lack detail or are ambiguous, the confidence score should be lower.
-   - **Data Consistency**: Assess the consistency and reliability of the data across the projects. Inconsistent or conflicting information should result in a lower confidence score.
-   - **Overall Certainty**: Reflect on the overall certainty of your analysis based on the data provided. The confidence score should reflect how certain you are of the results given the available information.
+   - **Input Quality** (weight: 0.25): Rate from 0-1 based on completeness, clarity, and specificity of both project descriptions.
+   - **Comparative Clarity** (weight: 0.20): Rate from 0-1 based on how easily discernible the similarities and differences are between the projects.
+   - **Domain Knowledge Alignment** (weight: 0.20): Rate from 0-1 based on how well the projects align with EU Horizon objectives and typical research projects.
+   - **Consistency** (weight: 0.15): Rate from 0-1 based on the internal consistency of each project description.
+   - **Quantifiability** (weight: 0.20): Rate from 0-1 based on how many aspects of the comparison can be objectively measured or quantified.
+
+   Calculate the final confidence score using the following formula:
+   Confidence Score = (Input Quality * 0.25) + (Comparative Clarity * 0.20) + (Domain Knowledge Alignment * 0.20) + (Consistency * 0.15) + (Quantifiability * 0.20)
+
+   Round the final score to two decimal places.
 
 6. **Justification**: 
    Provide a thorough, evidence-based explanation for the assigned similarity and confidence scores. Reference specific elements from both project descriptions to support your assessment.
