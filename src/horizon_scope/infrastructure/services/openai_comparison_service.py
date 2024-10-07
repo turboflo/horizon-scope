@@ -98,64 +98,60 @@ class OpenAIComparisonService(ComparisonService):
         return [
             {
                 "role": "system",
-                "content": "You are an expert academic research assistant specializing in EU Horizon projects. Your objective is to conduct a thorough, scholarly comparison between two project descriptions, offering a structured and detailed analysis.",
+                "content": "You are a highly experienced academic research assistant specializing in EU Horizon projects. Your task is to conduct a thorough, scholarly comparison between two project descriptions, providing a structured and detailed analysis with an emphasis on their similarities and differences.",
             },
             {
                 "role": "user",
                 "content": f"""
-Conduct a detailed, academic-level comparison of the following two project descriptions:
+Conduct an in-depth, academic-level comparison of the following two project descriptions:
 
-1. INPUT: {my_project}
-
-2. Existing EU Horizon project: {existing_project}
+1. **Input Project**: {my_project}
+2. **Existing EU Horizon Project**: {existing_project}
 
 Please structure your analysis as follows:
 
-1. **Summary**: 
-   Provide a concise, one-sentence summary of the existing EU Horizon project, highlighting its primary goals and innovations.
+1. **Summary**:  
+   Provide a concise, one-sentence summary of the existing EU Horizon project, focusing on its primary goals, innovative elements, and alignment with Horizon objectives.
 
-2. **Commonalities**: 
+2. **Commonalities**:  
    Discuss the significant similarities between the two projects, focusing on aspects such as:
-   - Research objectives and ambitions
-   - Methodological strategies
-   - Technological innovations
-   - Potential social or economic impacts
-   - Intended beneficiaries or stakeholders
+   - **Research Objectives**: Shared ambitions and overarching goals.
+   - **Methodological Approaches**: Similarities in research strategies or methods used.
+   - **Technological Innovations**: Identify overlapping innovations or technologies.
+   - **Potential Social or Economic Impacts**: Common expected societal or economic effects.
+   - **Beneficiaries/Stakeholders**: Alignment in terms of intended beneficiaries or stakeholders.
 
-3. **Key Differences**: 
+3. **Key Differences**:  
    Highlight and analyze the main differences between the projects, considering:
-   - Scope and scale of research activities
-   - Specific methodologies or technologies used
-   - Unique innovations or approaches
-   - Geographical or demographic focus
-   - Alignment with the EU Horizon program's specific objectives
+   - **Scope and Scale of Research**: Compare the scope and depth of research activities.
+   - **Unique Methodologies/Technologies**: Specific differences in methods or technologies used.
+   - **Innovative Contributions**: Identify distinctive breakthroughs or novel approaches.
+   - **Geographical or Demographic Focus**: Explore differences in the regional or demographic focus.
+   - **Alignment with EU Horizon Objectives**: How each project aligns with Horizon Europe’s specific priorities.
 
-4. **Similarity Score**: 
-   Assign a similarity score on a scale of 0 to 1 (with two decimal places), where 0 indicates no similarity and 1 indicates identical projects. 
-   
-   **Calculation Instructions**:
-   - **Weighting Factors**: Consider the importance of each aspect (e.g., research objectives might carry more weight than geographical focus). Assign appropriate weight to each factor based on its significance to the overall goals of the projects.
-   - **Balancing Factors**: Balance these factors to reflect both the commonalities and differences. For example, strong similarities in research goals but differences in methodologies should result in a moderate score.
-   - **Final Score**: Calculate the final score by aggregating the weighted similarities and differences, ensuring that the score accurately reflects the overall resemblance between the two projects.
+4. **Similarity Score** (0 to 1 scale):  
+   Assign a similarity score between 0 and 1, where 0 represents no similarity and 1 represents nearly identical projects.  
+   **Instructions**:
+   - **Weighting Factors**: Give more weight to core aspects like research objectives, while factors like geographic focus or stakeholder groups can receive less weight.
+   - **Balancing**: Balance similarities and differences to ensure the final score reflects the overall resemblance between the projects.
 
-5. **Confidence Score**:
-   Assign a confidence score on a scale of 0 to 1 (with two decimal places), where 0 indicates low confidence and 1 indicates high confidence in the accuracy and reliability of your similarity score and overall analysis.
-   **Calculation Instructions**:
-   - **Input Quality** (weight: 0.25): Rate from 0-1 based on completeness, clarity, and specificity of both project descriptions.
-   - **Comparative Clarity** (weight: 0.20): Rate from 0-1 based on how easily discernible the similarities and differences are between the projects.
-   - **Domain Knowledge Alignment** (weight: 0.20): Rate from 0-1 based on how well the projects align with EU Horizon objectives and typical research projects.
-   - **Consistency** (weight: 0.15): Rate from 0-1 based on the internal consistency of each project description.
-   - **Quantifiability** (weight: 0.20): Rate from 0-1 based on how many aspects of the comparison can be objectively measured or quantified.
+5. **Confidence Score** (0 to 1 scale):  
+   Assign a confidence score using the following formula:
 
-   Calculate the final confidence score using the following formula:
    Confidence Score = (Input Quality * 0.25) + (Comparative Clarity * 0.20) + (Domain Knowledge Alignment * 0.20) + (Consistency * 0.15) + (Quantifiability * 0.20)
 
-   Round the final score to two decimal places.
+   - **Input Quality** (0.25): Rate from 0-1 based on the clarity, completeness, and specificity of both project descriptions.
+   - **Comparative Clarity** (0.20): How clear and discernible are the similarities and differences between the two projects?
+   - **Domain Knowledge Alignment** (0.20): How well do the projects align with EU Horizon’s overall goals and research focus?
+   - **Consistency** (0.15): Are both project descriptions internally consistent and coherent?
+   - **Quantifiability** (0.20): How many aspects of the comparison are measurable or objective?
 
-6. **Justification**: 
-   Provide a thorough, evidence-based explanation for the assigned similarity and confidence scores. Reference specific elements from both project descriptions to support your assessment.
+   Round the final confidence score to two decimal places.
 
-Ensure your analysis is objective, precise, and grounded in the provided information. Maintain a formal academic tone throughout the response.
-                """,
+6. **Justification**:  
+   Provide a thorough explanation for the assigned similarity and confidence scores, referring to specific elements from both project descriptions to justify your assessment.
+
+Ensure your analysis remains objective, precise, and scholarly throughout, focusing on the comparative aspects while maintaining a formal academic tone.
+""",
             },
         ]
