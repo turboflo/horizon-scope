@@ -61,9 +61,7 @@ def create_project_card(
 
     with col2:
         st.subheader(project.title or "Untitled Project")
-        #
         st.caption(f"Project ID: {project.id}")
-        st.caption(f"Updated: {project.content_update_date or 'Date not available'}")
 
     with col3:
         st.link_button(
