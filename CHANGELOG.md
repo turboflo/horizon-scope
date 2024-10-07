@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.0.8 (2024-10-07)
+
+### Chore
+
+* chore: Add new streamlit presentation ([`c3b379d`](https://github.com/turboflo/horizon-scope/commit/c3b379d72f50c7cc161266aa72db36a776315080))
+
 ## v0.0.7 (2024-09-18)
 
 ### Unknown
