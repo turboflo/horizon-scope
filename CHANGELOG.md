@@ -1,8 +1,20 @@
 # CHANGELOG
 
+## v0.0.9 (2024-10-07)
+
+### Chore
+
+* chore: Remove unnecessary code in streamlit_presentation.py ([`074a99d`](https://github.com/turboflo/horizon-scope/commit/074a99d87bb16efd0b9a7fc00f1b1ab63f99e784))
+
+### Unknown
+
+* Merge branch &#39;development&#39; of https://github.com/turboflo/horizon-scope into development ([`179cc4e`](https://github.com/turboflo/horizon-scope/commit/179cc4ed24a86dc4a88cb7c5d22df4c2cb8f746f))
+
 ## v0.0.8 (2024-10-07)
 
 ### Chore
+
+* chore: Update ([`b377208`](https://github.com/turboflo/horizon-scope/commit/b377208afe8bc8458e00b7293b1dc0c9d9c0157c))
 
 * chore: Add new streamlit presentation ([`c3b379d`](https://github.com/turboflo/horizon-scope/commit/c3b379d72f50c7cc161266aa72db36a776315080))
 
